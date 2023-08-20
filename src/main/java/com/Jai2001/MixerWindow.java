@@ -55,7 +55,6 @@ public class MixerWindow extends Application {
 
     @Override
     public void start(Stage stage) {
-        exchanger.start(true, true);
         pStage = stage;
         try{
             Image icon = new Image(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("icon.png")));
@@ -92,7 +91,9 @@ public class MixerWindow extends Application {
     static final AnimationTimer debugTimings = new AnimationTimer() {
         @Override
         public void handle(long l) {
-            if(l%60==0) bottomText.setText(exchanger.getExtraInfo());
+            if(l%60==0){
+                bottomText.setText(exchanger.getExtraInfo());
+            }
         }
     };
     static EventHandler<ActionEvent> toggleExtraInfo = (e) -> {
@@ -156,6 +157,9 @@ public class MixerWindow extends Application {
         Mixer output = outputBox.getValue();
         if(input==null || output == null) return -1;
         AudioDataStream audioExchanger = null;
+        if(!exchanger.isStarted()){
+            exchanger.start(true, true);
+        }
         try {
             TargetDataLine inputLine = getLine(input,TargetDataLine.class);
             audioExchanger = exchanger.getSyncedStream(inputLine);
