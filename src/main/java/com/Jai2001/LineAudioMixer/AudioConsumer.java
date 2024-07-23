@@ -1,4 +1,6 @@
-package com.Jai2001;
+package com.Jai2001.LineAudioMixer;
+
+import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 
 import javax.sound.sampled.SourceDataLine;
 
@@ -29,6 +31,14 @@ public class AudioConsumer {
     /**The original byte array containing the raw audio data.*/
     public final byte[] original;
 
+    public int muteBind;
+
+    public boolean muted;
+
+    public boolean swap = false;
+
+    public short swapBuffer = 0;
+
     /**
      * Constructs an AudioConsumer.
      *
@@ -41,6 +51,8 @@ public class AudioConsumer {
         this.volume = volume;
         this.original = original;
         this.buffer = new byte[original.length];
+        this.muted = false;
+        this.muteBind = NativeKeyEvent.VC_UNDEFINED;
     }
 
     /**
@@ -54,15 +66,26 @@ public class AudioConsumer {
      * @param samples The number of samples to process.
      */
     public void adjustVolume(int samples) {
-        for (int i = 0; i < samples; i+=2) {
-            short right = original[i+1];
-            short left= original[i];
-            right = (short) ((right & 0xff) << 8);
-            left = (short) (left & 0xff);
-            short combined = (short) (right | left);
-            combined = (short) (combined * volume);
-            buffer[i] = (byte) combined;
-            buffer[i+1] = (byte) (combined >> 8);
+        if(samples!=0) {
+            swapBuffer = original[0];
+            for (int i = 0; i < samples; i+=2) {
+                short right = original[i+1];
+                short left= original[i];
+                right = (short) ((right & 0xff) << 8);
+                left = (short) (left & 0xff);
+                short combined = (short) (right | left) ;
+                combined = (short) (combined * volume);
+                if(swap){
+                    short next = combined;
+                    combined = swapBuffer;
+                    swapBuffer = next;
+                }
+                buffer[i] = (byte) combined;
+                buffer[i+1] = (byte) (combined >> 8);
+
+            }
         }
+
+
     }
 }

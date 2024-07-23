@@ -1,4 +1,4 @@
-package com.Jai2001;
+package com.Jai2001.LineAudioMixer;
 
 import javax.sound.sampled.Line;
 import javax.sound.sampled.LineUnavailableException;
@@ -36,6 +36,9 @@ public class AudioDataStream {
 
     /**Flag indicating if the stream is running.*/
     protected boolean started;
+
+
+
 
     /**
      * Constructs an AudioDataStream with the given input TargetDataLine.
@@ -98,6 +101,12 @@ public class AudioDataStream {
         return Math.log(exponential* 1000)/6.908;
     }
 
+    public void setSwapped(SourceDataLine output, boolean swap) {
+        if(consumers.containsKey(output.getLineInfo())){
+            consumers.get(output.getLineInfo()).swap = swap;
+        }
+    }
+
     /**
      * Sets the volume for the given output consumer.
      *
@@ -108,12 +117,13 @@ public class AudioDataStream {
      * decibels using {@link #scaleToDecibels(double)} and sets it on the
      * {@link AudioConsumer}.
      */
+
+
     public void setConsumerVolume(SourceDataLine output, double volume){
         if(consumers.containsKey(output.getLineInfo())){
             consumers.get(output.getLineInfo()).volume = scaleToDecibels(volume);;
         }
     }
-
     /**
      * Gets the linear volume level for the given output consumer.
      *

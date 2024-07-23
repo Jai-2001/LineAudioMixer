@@ -1,4 +1,4 @@
-package com.Jai2001;
+package com.Jai2001.LineAudioMixer;
 
 import javax.sound.sampled.Line;
 import javax.sound.sampled.TargetDataLine;
