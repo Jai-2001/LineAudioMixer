@@ -1,6 +1,5 @@
 package com.Jai2001.LineAudioMixer;
 
-import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 
 import javax.sound.sampled.SourceDataLine;
 
@@ -31,10 +30,6 @@ public class AudioConsumer {
     /**The original byte array containing the raw audio data.*/
     public final byte[] original;
 
-    public int muteBind;
-
-    public boolean muted;
-
     public boolean swap = false;
 
     public short swapBuffer = 0;
@@ -51,8 +46,6 @@ public class AudioConsumer {
         this.volume = volume;
         this.original = original;
         this.buffer = new byte[original.length];
-        this.muted = false;
-        this.muteBind = NativeKeyEvent.VC_UNDEFINED;
     }
 
     /**

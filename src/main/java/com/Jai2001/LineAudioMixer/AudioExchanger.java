@@ -95,7 +95,7 @@ public class AudioExchanger {
             syncedStreams.put(key, syncedStream);
             producerList = syncedStreams.values().toArray(new AudioDataStream[0]);
         }
-        maxWait = Math.max(maxWait,(long) input.getFormat().getSampleRate());
+        maxWait = Math.max(maxWait,(long) 1e9 / (long) input.getFormat().getSampleRate());
         return syncedStream;
     }
 
